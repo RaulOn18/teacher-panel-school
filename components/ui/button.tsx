@@ -46,6 +46,7 @@ function Button({
     asChild?: boolean
   }) {
   const Comp = asChild ? Slot : "button"
+  className += " hover:cursor-pointer"
 
   return (
     <Comp

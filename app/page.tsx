@@ -17,7 +17,13 @@ export default function Home() {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <Image src={"/loading.gif"} alt="loading" width={100} height={100} />
+      <Image
+        src={"/loading.gif"}
+        alt="loading"
+        width={100}
+        height={100}
+        unoptimized
+      />
     </div>
   );
 }

@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Teacher Portal",
-  description: "Teacher Portal Lab School",
+  title: "Teacher Panel",
+  description: "Teacher Panel Lab School",
 };
 
 export default function RootLayout({
