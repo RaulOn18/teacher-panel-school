@@ -407,7 +407,7 @@ export default function Page() {
                       <div className="grid grid-cols-2 gap-x-4 pt-4">
                         <Card className="rounded-md">
                           <CardHeader>
-                            <CardTitle>Ringkasan Absensi</CardTitle>
+                            <CardTitle>Ringkasan Kehadiran</CardTitle>
                             <CardDescription>
                               Semester Genap 2024/2025
                             </CardDescription>

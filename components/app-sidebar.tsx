@@ -19,6 +19,7 @@ import {
   IconSchool,
   IconBook,
   IconCalendar,
+  IconMessageBolt,
 } from "@tabler/icons-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -59,13 +60,23 @@ const data = {
     },
     {
       title: "Kehadiran",
-      url: "#",
+      url: "/attendance-management",
       icon: IconCalendar,
     },
     {
       title: "Nilai",
-      url: "#",
+      url: "/grades",
       icon: IconChartBar,
+    },
+    {
+      title: "Jadwal",
+      url: "/schedule",
+      icon: IconCalendar,
+    },
+    {
+      title: "Pesan",
+      url: "/chat",
+      icon: IconMessageBolt,
     },
   ],
   navClouds: [

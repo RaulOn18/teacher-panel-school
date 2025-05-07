@@ -31,6 +31,7 @@ import {
   IconCancel,
   IconCheck,
   IconChevronDown,
+  IconClock,
   IconEdit,
   IconMail,
   IconNote,
@@ -39,10 +40,20 @@ import {
   IconTrash,
   IconUsers,
 } from "@tabler/icons-react";
-import { Filter, Icon, Search } from "lucide-react";
+import {
+  Calendar,
+  ChevronDown,
+  FileText,
+  Filter,
+  Icon,
+  Plus,
+  Search,
+} from "lucide-react";
 import { useState } from "react";
 import { ScoreDistribution } from "./scores-distribution";
 import { DaftarSiswaDataTable } from "./daftar-siswa-data-table";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import { Tooltip } from "@/components/ui/tooltip";
 
 export default function Page() {
   const [selectedClass, setSelectedClass] = useState<string | null>(null);
@@ -53,6 +64,7 @@ export default function Page() {
       name: "X IPA 2",
       subject: "Matematika",
       schedule: "Senin, 07:30 - 09:00",
+      walikelas: "Budi Santoso",
       totalStudents: 32,
       averageGrade: 78,
       attendanceRate: 92,
@@ -123,6 +135,7 @@ export default function Page() {
       name: "XI IPA 1",
       subject: "Fisika",
       schedule: "Selasa, 09:15 - 10:45",
+      walikelas: "Fajrul Ghufron",
       totalStudents: 30,
       averageGrade: 75,
       attendanceRate: 88,
@@ -243,6 +256,13 @@ export default function Page() {
                       <DropdownMenuItem>Biologi</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
+                  <Button
+                    variant={"outline"}
+                    onClick={() => {}}
+                    size={"default"}
+                  >
+                    <IconPlus className="w-4 h-4" /> Kelas
+                  </Button>
                 </div>
 
                 <Card className="rounded-md pb-0">
@@ -297,21 +317,13 @@ export default function Page() {
               <Card className="w-full flex-2 rounded-md">
                 <CardHeader>
                   <div className="flex items-center gap-2 justify-between">
-                    <div className="flex gap-4 items-center">
-                      <Avatar className="w-12 h-12">
-                        <AvatarImage src={""} className="w-12 h-12" />
-                        <AvatarFallback>
-                          {classData?.name.charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <CardTitle className="text-lg">
-                          {classData?.name}
-                        </CardTitle>
-                        <CardDescription>
-                          {classData?.totalStudents}
-                        </CardDescription>
-                      </div>
+                    <div className="flex flex-col">
+                      <CardTitle className="text-lg">
+                        {classData?.name} - {classData?.walikelas}
+                      </CardTitle>
+                      <CardDescription className="flex gap-2 items-center">
+                        <IconClock className="w-4 h-4" /> {classData?.schedule}
+                      </CardDescription>
                     </div>
                     <DropdownMenu>
                       <DropdownMenuTrigger className="focus:outline-none">
@@ -414,14 +426,200 @@ export default function Page() {
                         </CardContent>
                       </Card>
                     </TabsContent>
-                    <TabsContent value="schedule">
-                      <div>Jadwal</div>
+                    <TabsContent
+                      value="schedule"
+                      className="flex flex-col gap-4"
+                    >
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>Jadwal Kelas</CardTitle>
+                          <CardDescription>
+                            Jadwal pertemuan untuk {classData!.name} -{" "}
+                            {classData!.subject}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="rounded-md border p-4">
+                            <div className="flex items-center gap-4">
+                              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                                <Calendar className="h-6 w-6 text-primary" />
+                              </div>
+                              <div>
+                                <p className="font-medium">
+                                  {classData!.schedule}
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                  Ruang 203
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="mt-4">
+                            <Button variant="outline">
+                              <Plus className="mr-2 h-4 w-4" />
+                              Tambah Jadwal
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>Kehadiran Kelas</CardTitle>
+                          <CardDescription>
+                            Persentase kehadiran siswa
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="h-[250px]">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <PieChart>
+                                <Pie
+                                  data={classData!.attendanceData}
+                                  cx="50%"
+                                  cy="50%"
+                                  innerRadius={60}
+                                  outerRadius={80}
+                                  paddingAngle={2}
+                                  dataKey="value"
+                                  label={({ name, percent }) =>
+                                    `${name} ${(percent * 100).toFixed(0)}%`
+                                  }
+                                  labelLine={false}
+                                >
+                                  {classData!.attendanceData.map(
+                                    (entry, index) => (
+                                      <Cell
+                                        key={`cell-${index}`}
+                                        fill={entry.color}
+                                      />
+                                    )
+                                  )}
+                                </Pie>
+                              </PieChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </CardContent>
+                      </Card>
                     </TabsContent>
                     <TabsContent value="material">
-                      <div>Materi</div>
+                      <Card>
+                        <CardHeader className="flex flex-row items-center">
+                          <div>
+                            <CardTitle>Materi Pembelajaran</CardTitle>
+                            <CardDescription>
+                              Materi untuk {classData!.name} -{" "}
+                              {classData!.subject}
+                            </CardDescription>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="ml-auto"
+                          >
+                            <Plus className="mr-2 h-4 w-4" />
+                            Unggah Materi
+                          </Button>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="rounded-md border">
+                            <div className="grid grid-cols-12 gap-4 p-4 font-medium border-b">
+                              <div className="col-span-6">Judul</div>
+                              <div className="col-span-2">Tipe</div>
+                              <div className="col-span-3">Tanggal</div>
+                              <div className="col-span-1"></div>
+                            </div>
+                            {classData!.materials.map((material) => (
+                              <div
+                                key={material.id}
+                                className="grid grid-cols-12 gap-4 p-4 items-center border-b last:border-0"
+                              >
+                                <div className="col-span-6 flex items-center gap-3">
+                                  <FileText className="h-5 w-5 text-muted-foreground" />
+                                  <span>{material.title}</span>
+                                </div>
+                                <div className="col-span-2">
+                                  <Badge variant="outline">
+                                    {material.type}
+                                  </Badge>
+                                </div>
+                                <div className="col-span-3 text-sm text-muted-foreground">
+                                  {material.date}
+                                </div>
+                                <div className="col-span-1 text-right">
+                                  <Button variant="ghost" size="icon">
+                                    <ChevronDown className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
                     </TabsContent>
                     <TabsContent value="task">
-                      <div>Tugas</div>
+                      <Card>
+                        <CardHeader className="flex flex-row items-center">
+                          <div>
+                            <CardTitle>Tugas dan Penilaian</CardTitle>
+                            <CardDescription>
+                              Tugas untuk {classData!.name} -{" "}
+                              {classData!.subject}
+                            </CardDescription>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="ml-auto"
+                          >
+                            <Plus className="mr-2 h-4 w-4" />
+                            Tambah Tugas
+                          </Button>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="rounded-md border">
+                            <div className="grid grid-cols-12 gap-4 p-4 font-medium border-b">
+                              <div className="col-span-6">Judul</div>
+                              <div className="col-span-3">Tenggat Waktu</div>
+                              <div className="col-span-2">Status</div>
+                              <div className="col-span-1"></div>
+                            </div>
+                            {classData!.assignments.map((assignment) => (
+                              <div
+                                key={assignment.id}
+                                className="grid grid-cols-12 gap-4 p-4 items-center border-b last:border-0"
+                              >
+                                <div className="col-span-6 flex items-center gap-3">
+                                  <FileText className="h-5 w-5 text-muted-foreground" />
+                                  <span>{assignment.title}</span>
+                                </div>
+                                <div className="col-span-3 flex items-center text-sm text-muted-foreground">
+                                  <Calendar className="mr-2 h-4 w-4" />
+                                  {assignment.dueDate}
+                                </div>
+                                <div className="col-span-2">
+                                  <Badge
+                                    variant="outline"
+                                    className={
+                                      assignment.status === "Aktif"
+                                        ? "bg-green-50 text-green-700"
+                                        : assignment.status === "Selesai"
+                                        ? "bg-blue-50 text-blue-700"
+                                        : "bg-yellow-50 text-yellow-700"
+                                    }
+                                  >
+                                    {assignment.status}
+                                  </Badge>
+                                </div>
+                                <div className="col-span-1 text-right">
+                                  <Button variant="ghost" size="icon">
+                                    <ChevronDown className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
                     </TabsContent>
                   </Tabs>
                 </CardContent>

@@ -17,11 +17,19 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
-type ChartData = {
+type chartDataType = {
   grade: string;
   count: number;
 };
+
+// const chartData = [
+//   { grade: "January", count: 186 },
+//   { grade: "February", count: 305 },
+//   { grade: "March", count: 237 },
+//   { grade: "April", count: 73 },
+//   { grade: "May", count: 209 },
+//   { grade: "June", count: 214 },
+// ];
 
 const chartConfig = {
   count: {
@@ -30,14 +38,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function ScoreDistribution({ chartData }: { chartData: ChartData[] }) {
+export function DistribusiNilai({ chartData }: { chartData: chartDataType[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Distirbusi Nilai</CardTitle>
+        <CardTitle>Distribusi Nilai</CardTitle>
         <CardDescription>Sebaran nilai siswa</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="h-full w-full">
         <ChartContainer config={chartConfig}>
           <BarChart
             accessibilityLayer
